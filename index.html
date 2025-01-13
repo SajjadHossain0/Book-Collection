@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .bookshelf-container {
+            width: 90%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            align-items: center;
+        }
+
+        .add-book-box {
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed #aaa;
+            border-radius: 10px;
+            height: 200px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .add-book-box:hover {
+            background-color: #d6d6d6;
+        }
+
+        .add-book-box span {
+            font-size: 3rem;
+            color: #666;
+        }
+
+        .book-card {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .book-card img {
+            max-width: 100%;
+            border-radius: 5px;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .book-card h3 {
+            font-size: 1rem;
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        .book-card p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+
+        .modal-content label {
+            width: 100%;
+            text-align: left;
+            color: #555;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .modal-content .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .modal-content button {
+            flex: 1;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .modal-content button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal-content .close-btn {
+            background: #e74c3c;
+        }
+
+        .modal-content .close-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bookshelf-container" id="bookshelf-container">
+        <div class="add-book-box" onclick="openModal()">
+            <span>+</span>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2>Add a New Book</h2>
+            <label for="cover-url">Cover Image URL</label>
+            <input type="text" id="cover-url" placeholder="Enter cover image URL" />
+
+            <label for="book-title">Book Title</label>
+            <input type="text" id="book-title" placeholder="Enter book title" />
+
+            <label for="author-name">Author Name</label>
+            <input type="text" id="author-name" placeholder="Enter author name" />
+
+            <div class="button-container">
+                <button onclick="addBook()">Add Book</button>
+                <button class="close-btn" onclick="closeModal()">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const bookshelfContainer = document.getElementById('bookshelf-container');
+
+        document.addEventListener('DOMContentLoaded', loadBooks);
+
+        function openModal() {
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        function addBook() {
+            const coverUrl = document.getElementById('cover-url').value.trim();
+            const title = document.getElementById('book-title').value.trim();
+            const author = document.getElementById('author-name').value.trim();
+
+            if (!coverUrl || !title || !author) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const book = { coverUrl, title, author };
+
+            saveBookToLocalStorage(book);
+
+            createBookCard(book);
+
+            document.getElementById('cover-url').value = '';
+            document.getElementById('book-title').value = '';
+            document.getElementById('author-name').value = '';
+
+            closeModal();
+        }
+
+        function createBookCard(book) {
+            const bookCard = document.createElement('div');
+            bookCard.classList.add('book-card');
+            bookCard.innerHTML = `
+        <img src="${book.coverUrl}" alt="${book.title}" />
+        <h3>${book.title}</h3>
+        <p>by ${book.author}</p>
+      `;
+            bookshelfContainer.appendChild(bookCard);
+        }
+
+        function saveBookToLocalStorage(book) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            books.push(book);
+            localStorage.setItem('books', JSON.stringify(books));
+        }
+
+        function loadBooks() {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            books.forEach(createBookCard);
+        }
+    </script>
+
+</body>
+
+</html>
