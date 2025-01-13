@@ -16,10 +16,11 @@ You can try the live demo [here](#).
 ## Screenshots
 
 ### Bookshelf View
-![Screenshot 2025-01-13 151310](https://github.com/user-attachments/assets/d8f1da6c-dfb2-4846-a759-84f49f4d5564)
+![Screenshot 2025-01-13 151255](https://github.com/user-attachments/assets/0ecd6f93-0f58-489f-b041-491c444f3409)
 
 ### Add New Book Modal
-![Screenshot 2025-01-13 151255](https://github.com/user-attachments/assets/0ecd6f93-0f58-489f-b041-491c444f3409)
+![Screenshot 2025-01-13 151310](https://github.com/user-attachments/assets/d8f1da6c-dfb2-4846-a759-84f49f4d5564)
+
 
 ## Installation
 
